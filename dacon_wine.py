@@ -77,7 +77,7 @@ print(y)
 x_train, x_test, y_train, y_test = train_test_split(
     x,
     y,
-    test_size=0.2,
+    test_size=0.3,
     random_state=2222,
     stratify=y #분류 모델이니깐 사용합니다.(균등분배) 균등하게 분배하는지 어떻게 확인할까?
 )
@@ -91,13 +91,13 @@ x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
 #print(x_train.shape, x_test.shape) # (4397, 11) (1100, 11) #하기 전에 train은 늘어났고 test는 줄어들었다. 이유는?
 print(y.shape)
-"""
+
 #2. MODEL
 model = Sequential()
 model.add(Dense(256, input_shape=(11,)))
-model.add(Dropout(0.6))
-model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.4))
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.3))
 model.add(Dense(64, activation='relu'))
 model.add(Dropout(0.2))
 model.add(Dense(32, activation='relu'))
@@ -119,25 +119,45 @@ mcp = ModelCheckpoint(
     save_best_only=True,
     filepath="".join([filepath, 'dacon_wine', date, '_', filename])
 )
-hist = model.fit(x_train, y_train, epochs=1000, validation_split=0.2, batch_size=300, callbacks=[es, mcp])
-"""
+hist = model.fit(x_train, y_train, epochs=1000, validation_split=0.2, batch_size=200, callbacks=[es, mcp])
+
 # SAVE_MODEL
-#model.save('./_save/model_dacon_wine/(stratifyOFF)wine_model.h5')
+model.save('./_save/model_dacon_wine/bestOfbest_wine_model.h5')
+#model = load_model('_save\MCP\dacon_wine\dacon_wine0315_1010_0213_0.9815_0.6136.hdf5')
 #MCPMODEL
 #model = load_model('_save\MCP\dacon_wine\(stratifyOFF)dacon_wine0314_4646_0234_1.0691_0.5773.hdf5')
 #ACC:  0.59 MCP로 뽑은 모델이 더 좋다. MCP > SAVE model=(stratifyON)dacon_wine0314_2323
 #ACC:  0.6272727272727273 #stratify=y주석 = 결과가 많이 좋아졌다. model=(stratifyON)dacon_wine0314_2323
 #ACC:  0.5854545454545454 #stratify=y노주석 = 결과가 조금 좋아졌다. model=(stratifyOFF)dacon_wine0314_4646
 #ACC:  0.5754545454545454 #stratify=y주석 = 결과가 떨어졌다.  model=(stratifyOFF)dacon_wine0314_4646
+#ACC:  0.6054545454545455 #stratify=y노주석 + random_stat변경 = 결과가 많이 좋아졌따. model=(stratifyOFF)dacon_wine0314_4646
 
 #SAVEMODEL
-model = load_model('_save\model_dacon_wine\(stratifyOFF)wine_model.h5')
-hist = model.fit(x_train, y_train, epochs=100, validation_split=0.2, batch_size=300)
-#ACC:  0.5563636363636364 model=(stratifyON)wine_model
+#model = load_model('_save\model_dacon_wine\(stratifyOFF)wine_model.h5')
+'''
+es = EarlyStopping(
+    monitor='val_acc',
+    mode='auto',
+    patience=500,
+    restore_best_weights=True
+)
+mcp = ModelCheckpoint(
+    monitor='val_acc',
+    mode='auto',
+    verbose=1,
+    save_best_only=True,
+    filepath="".join([filepath, 'dacon_wine', date, '_', filename])
+)
+hist = model.fit(x_train, y_train, epochs=2000, validation_split=0.3, batch_size=200, callbacks=[es, mcp])
+'''
+#ACC:  0.5563636363636364 #stratify=y노주석 model=(stratifyON)wine_model
 #ACC:  0.5618181818181818 #stratify=y주석 = 결과가 조금 좋아졌다. model=(stratifyON)wine_model
 #ACC:  0.58 #stratify=y주석 = 결과가 조금 좋아졌다. model=(stratifyOFF)wine_model 
 #ACC:  0.5890909090909091 #stratify=노주석 = 결과가 조금 좋아졌다. model=(stratifyOFF)wine_model 
-#
+#ACC:  0.6145454545454545 #stratify=노주석 + random_stat변경 = 결과가 많이 좋아졌따. model=(stratifyOFF)wine_model 
+
+#####결론은 stratify=y 노주석 후 MCP로 모델 뽑은 뒤 stratify=y주석 + random_state변경 후 값이 제일 좋다#####
+
 #4. PREDICT
 results = model.evaluate(x_test, y_test)
 print('loss: ', results[0], 'acc:', results[1])
@@ -155,7 +175,7 @@ y_submit = model.predict(test_csv_sc)
 y_submit = np.argmax(y_submit, axis=1)
 submission = pd.read_csv(path + 'sample_submission.csv', index_col=0)
 submission['quality'] = y_submit
-submission.to_csv(path_save + 'dacon_wine_submit.csv')
+submission.to_csv(path_save + 'best_dacon_wine_submit.csv')
 
 #6. PLT
 plt.plot(hist.history['acc'], label='acc', color='red')
