@@ -137,7 +137,7 @@ hist = model.fit(x_train, y_train, epochs=100, validation_split=0.2, batch_size=
 #ACC:  0.5618181818181818 #stratify=y주석 = 결과가 조금 좋아졌다. model=(stratifyON)wine_model
 #ACC:  0.58 #stratify=y주석 = 결과가 조금 좋아졌다. model=(stratifyOFF)wine_model 
 #ACC:  0.5890909090909091 #stratify=노주석 = 결과가 조금 좋아졌다. model=(stratifyOFF)wine_model 
-#
+
 #4. PREDICT
 results = model.evaluate(x_test, y_test)
 print('loss: ', results[0], 'acc:', results[1])
