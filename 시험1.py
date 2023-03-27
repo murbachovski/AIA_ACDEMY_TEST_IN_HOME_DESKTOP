@@ -83,7 +83,8 @@ x1_train, x1_test, x2_train, x2_test, y_train, y_test = train_test_split(
     x2,
     y1,
     test_size=0.025,
-    shuffle=False
+    shuffle=False,
+    random_state=2222
 )
 
 # SCALER
@@ -175,4 +176,5 @@ plt.show()
 #epochs 낮게 하고 전일 나스닥과 비교해서 뽑아내야겠다.
 # 3. loss:  40443076.0 predict:  [[54582.74]] epochs=200 batch=128
 # 4. loss:  9465401.0 predict:  [[60991.746]] epochs=100, batch=64
-# 5.  epochs=100, batch=32
+# 5. loss:  20160734.0 predict:  [[56558.746]] epochs=100, batch=32
+# 6. loss:  11482661.0 predict:  [[61048.805]] epochs=100, batch=32, random=2222
