@@ -22,6 +22,7 @@ y = train_data[:, -1]
 x_predict = split_data(x_predict, 4)
 print(x, y, x_predict)
 print(x.shape, y.shape, x_predict.shape) # (96, 4) (96,) (7, 4)
+print(x)
 
 #2. MODEL
 model = Sequential()
