@@ -21,7 +21,7 @@ test_datagen = ImageDataGenerator(
 xy_train = train_datagen.flow_from_directory(
     'c:/study_data/_data/brain/train/',
     target_size=(100, 100), # 각각 다른 사이즈를 가진 이미지들을 (200, 200)사이즈로 맞춰 준다.
-    batch_size=160,
+    batch_size=20,
     class_mode='binary',
     color_mode='grayscale',
     shuffle=True
@@ -30,7 +30,7 @@ xy_train = train_datagen.flow_from_directory(
 xy_test = test_datagen.flow_from_directory(
     'c:/study_data/_data/brain/test/',
     target_size=(100, 100), # 각각 다른 사이즈를 가진 이미지들을 (200, 200)사이즈로 맞춰 준다.
-    batch_size=160,
+    batch_size=40,
     class_mode='binary',
     color_mode='grayscale',
     shuffle=True
@@ -71,9 +71,9 @@ Es = EarlyStopping(
 )
 hist = model.fit_generator(xy_train,
                            epochs=100,
-                           steps_per_epoch=1, # 전체 데이터/batch = 160/5 = 32
+                           steps_per_epoch=80, # 전체 데이터/batch = 160/5 = 32
                            validation_data=xy_test,
-                           validation_steps=1 # validation_data/batch = 120/5 = 24
+                           validation_steps=30 # validation_data/batch = 120/5 = 24
                            )
 loss = hist.history['loss']
 val_loss = hist.history['val_loss']
@@ -91,3 +91,5 @@ plt.plot(range(len(hist.history['acc'])),hist.history['acc'],label='acc')
 plt.plot(range(len(hist.history['val_acc'])),hist.history['val_acc'],label='val_acc')
 plt.legend()
 plt.show()
+
+# loss:  0.590351402759552 val_loss:  0.4150395691394806 acc:  0.6625000238418579 val_acc:  0.824999988079071
