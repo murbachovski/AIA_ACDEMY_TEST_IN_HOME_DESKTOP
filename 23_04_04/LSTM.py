@@ -26,3 +26,20 @@ from keras.preprocessing.sequence import pad_sequences
 pad_x = pad_sequences(x, padding='pre', maxlen=5)
 word_size = len(token.word_index)
 print('단어 사전 갯수: ', word_size)
+
+#2. MODEL
+model = Sequential()
+model.add(Reshape(target_shape=(5, 1), input_shape=(5,)))
+model.add(LSTM(32))
+model.add(Dense(10))
+model.add(Dense(1, activation='sigmoid'))
+
+#3. COMPILE
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['acc'])
+model.fit(pad_x, labels, epochs=10, batch_size=10)
+
+#4. PREDICT
+acc = model.evaluate(pad_x, labels)[1]
+print('acc: ', acc)
+
+
