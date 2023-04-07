@@ -41,10 +41,3 @@ model.fit(x, y, epochs=1000, batch_size=32)
 loss = model.evaluate(x, y)
 result = model.predict(x_predict)
 print('loss: ', loss, 'result: ', result)
-# [[ 99.79762]
-#  [100.36932]
-#  [100.81511]
-#  [101.22258]
-#  [101.59339]
-#  [101.92781]
-#  [102.22594]]
