@@ -61,3 +61,4 @@ plt.plot(val_acc, label='val_acc')
 plt.grid()
 plt.legend()
 plt.show()
+#복습
