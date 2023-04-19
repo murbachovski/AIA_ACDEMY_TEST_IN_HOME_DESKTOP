@@ -44,7 +44,7 @@ model.add(Dense(1))
 
 #3. COMPILE
 model.compile(loss='mse', optimizer='adam', metrics=['acc'])
-model.fit(x_test, y_test, epochs=500, batch_size=500)
+model.fit(x_test, y_test, epochs=500, batch_size=50)
 
 #4. PREDICT
 results = model.evaluate(x_test)
